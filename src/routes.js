@@ -1,14 +1,21 @@
-var { Router } = require("express");
-var routes = new Router();
-const SessionCotroller = require("./controllers/SessionController");
-const authMiddlewares = require("./middlewares/auth");
+import { Router } from 'express';
 
-routes.post("/session", SessionCotroller.session);
+import authMiddlewares from './app/middlewares/auth';
+import SessionCotroller from './app/controllers/SessionController';
+import UserCotroller from './app/controllers/UserController';
+
+const routes = new Router();
+
+routes.get('/', (req, res) => {
+  return res.json({ message: 'Node.js com JWT e Hash na senha' });
+});
+
+routes.post('/session', SessionCotroller.session);
+
+routes.post('/users', UserCotroller.store);
 
 routes.use(authMiddlewares);
 
-routes.get("/", function (req, res) {
-  return res.json({ message: "Node.js com JWT e Hash na senha" });
-});
+routes.get('/users', UserCotroller.index);
 
-module.exports = routes;
+export default routes;
